@@ -1912,41 +1912,42 @@ int main(void)
      ee0:	0f 92       	push	r0
      ee2:	cd b7       	in	r28, 0x3d	; 61
      ee4:	de b7       	in	r29, 0x3e	; 62
-	uint8 tempValue = 0;
+	uint8 tempValue = 0;               /* Variable to Store the Temperature value (initialized with 0) */
      ee6:	1b 82       	std	Y+3, r1	; 0x03
 
-	ADC_ConfigType *Config_Ptr;
+	ADC_ConfigType *Config_Ptr;        /* Pointer to Struct of type ADC_ConfigType */
 
-	Config_Ptr->prescaler = FCPU_8;
+	Config_Ptr->prescaler = FCPU_8;       /* Make ADC operate with Frequency = FCPU/8 (Prescaler --> 8) */
      ee8:	e9 81       	ldd	r30, Y+1	; 0x01
      eea:	fa 81       	ldd	r31, Y+2	; 0x02
      eec:	83 e0       	ldi	r24, 0x03	; 3
      eee:	81 83       	std	Z+1, r24	; 0x01
-	Config_Ptr->ref_volt = INTERNAL_VREF;
+
+	Config_Ptr->ref_volt = INTERNAL_VREF; /* Make ADC operate with the internal reference voltage (2.56 V) */
      ef0:	e9 81       	ldd	r30, Y+1	; 0x01
      ef2:	fa 81       	ldd	r31, Y+2	; 0x02
      ef4:	83 e0       	ldi	r24, 0x03	; 3
      ef6:	80 83       	st	Z, r24
 
-	ADC_init(Config_Ptr);
+	ADC_init(Config_Ptr);     /* Passing this Pointer as Parameter to ADC_init() to initailize ADC with these requirements */
      ef8:	89 81       	ldd	r24, Y+1	; 0x01
      efa:	9a 81       	ldd	r25, Y+2	; 0x02
      efc:	0e 94 dc 07 	call	0xfb8	; 0xfb8 <ADC_init>
 
-	LCD_init();
+	LCD_init();               /* Initialize LCD */
      f00:	0e 94 16 0c 	call	0x182c	; 0x182c <LCD_init>
 
-	DcMotor_Init();
+	DcMotor_Init();           /* Initialize DC-Motor */
      f04:	0e 94 2f 08 	call	0x105e	; 0x105e <DcMotor_Init>
 
-	LCD_displayStringRowColumn(0, 2, "FAN IS ");
+	LCD_displayStringRowColumn(0, 2, "FAN IS ");     /* Display String "FAN IS" at (ROW 0, COLUMN 2) on LCD */
      f08:	20 e6       	ldi	r18, 0x60	; 96
      f0a:	30 e0       	ldi	r19, 0x00	; 0
      f0c:	80 e0       	ldi	r24, 0x00	; 0
      f0e:	62 e0       	ldi	r22, 0x02	; 2
      f10:	a9 01       	movw	r20, r18
      f12:	0e 94 f8 10 	call	0x21f0	; 0x21f0 <LCD_displayStringRowColumn>
-	LCD_displayStringRowColumn(1, 2, "TEMP = ");
+	LCD_displayStringRowColumn(1, 2, "TEMP = ");    /* Display String "TEMP = " at (ROW 1, COLUMN 2) on LCD */
      f16:	28 e6       	ldi	r18, 0x68	; 104
      f18:	30 e0       	ldi	r19, 0x00	; 0
      f1a:	81 e0       	ldi	r24, 0x01	; 1
@@ -1957,10 +1958,11 @@ int main(void)
 
 	while(1)
 	{
-		tempValue = LM35_GetTemperature();
+		tempValue = LM35_GetTemperature();    /* Get the value of Temperature from LM35 Sensor */
      f24:	0e 94 3e 11 	call	0x227c	; 0x227c <LM35_GetTemperature>
      f28:	8b 83       	std	Y+3, r24	; 0x03
 
+		/*  If the temperature is less than 30 C, Turn off the fan */
 		if (tempValue < 30)
      f2a:	8b 81       	ldd	r24, Y+3	; 0x03
      f2c:	8e 31       	cpi	r24, 0x1E	; 30
@@ -1982,31 +1984,36 @@ int main(void)
      f46:	69 e0       	ldi	r22, 0x09	; 9
      f48:	a9 01       	movw	r20, r18
      f4a:	0e 94 f8 10 	call	0x21f0	; 0x21f0 <LCD_displayStringRowColumn>
+			/* To Clear the next digit if OFF state happened first */
 			LCD_displayCharacter(' ');
      f4e:	80 e2       	ldi	r24, 0x20	; 32
      f50:	0e 94 ab 0e 	call	0x1d56	; 0x1d56 <LCD_displayCharacter>
 		}
 
 
-		LCD_moveCursor(1, 9);
+		LCD_moveCursor(1, 9);              /* Move Cursor to (ROW 1 , COLUMN 9) on LCD */
      f54:	81 e0       	ldi	r24, 0x01	; 1
      f56:	69 e0       	ldi	r22, 0x09	; 9
      f58:	0e 94 b6 10 	call	0x216c	; 0x216c <LCD_moveCursor>
-		LCD_integerToString(tempValue);
+		LCD_integerToString(tempValue);    /* Convert Temperature's Decimal value into String to Display it on LCD */
      f5c:	8b 81       	ldd	r24, Y+3	; 0x03
      f5e:	88 2f       	mov	r24, r24
      f60:	90 e0       	ldi	r25, 0x00	; 0
      f62:	0e 94 11 11 	call	0x2222	; 0x2222 <LCD_integerToString>
+
+		/* To handle the transitions of the digital value from 3 digits to 2 or 1 , Print space in the next digit place */
 		LCD_displayString(" C ");
      f66:	87 e7       	ldi	r24, 0x77	; 119
      f68:	90 e0       	ldi	r25, 0x00	; 0
      f6a:	0e 94 9a 10 	call	0x2134	; 0x2134 <LCD_displayString>
+
 
 		if(tempValue >= 120)
      f6e:	8b 81       	ldd	r24, Y+3	; 0x03
      f70:	88 37       	cpi	r24, 0x78	; 120
      f72:	28 f0       	brcs	.+10     	; 0xf7e <main+0xa4>
 		{
+			/* If the temperature is greater than or equal 120C , Turn on the fan with 100% of its maximum speed */
 			DcMotor_Rotate(ClockWise, 100);
      f74:	82 e0       	ldi	r24, 0x02	; 2
      f76:	64 e6       	ldi	r22, 0x64	; 100
@@ -2018,6 +2025,7 @@ int main(void)
      f80:	8a 35       	cpi	r24, 0x5A	; 90
      f82:	28 f0       	brcs	.+10     	; 0xf8e <main+0xb4>
 		{
+			/* If the temperature is greater than or equal 90C , Turn on the fan with 75% of its maximum speed */
 			DcMotor_Rotate(ClockWise, 75);
      f84:	82 e0       	ldi	r24, 0x02	; 2
      f86:	6b e4       	ldi	r22, 0x4B	; 75
@@ -2029,6 +2037,7 @@ int main(void)
      f90:	8c 33       	cpi	r24, 0x3C	; 60
      f92:	28 f0       	brcs	.+10     	; 0xf9e <main+0xc4>
 		{
+			/* If the temperature is greater than or equal 60C , Turn on the fan with 50% of its maximum speed */
 			DcMotor_Rotate(ClockWise, 50);
      f94:	82 e0       	ldi	r24, 0x02	; 2
      f96:	62 e3       	ldi	r22, 0x32	; 50
@@ -2040,14 +2049,17 @@ int main(void)
      fa0:	8e 31       	cpi	r24, 0x1E	; 30
      fa2:	28 f0       	brcs	.+10     	; 0xfae <main+0xd4>
 		{
+			/* If the temperature is greater than or equal 30C , Turn on the fan with 25% of its maximum speed */
 			DcMotor_Rotate(ClockWise, 25);
      fa4:	82 e0       	ldi	r24, 0x02	; 2
      fa6:	69 e1       	ldi	r22, 0x19	; 25
      fa8:	0e 94 4a 08 	call	0x1094	; 0x1094 <DcMotor_Rotate>
      fac:	bb cf       	rjmp	.-138    	; 0xf24 <main+0x4a>
-		}
-		else
 		{
+			/* If the temperature is less than 30 C, Turn off the fan
+			 * With DC_MotorState == STOP , It doesn't matter what the speed is
+			 * BUT With DC_MotorState != STOP , Speed MUST be ZERO
+			 */
 			DcMotor_Rotate(STOP, 0);
      fae:	80 e0       	ldi	r24, 0x00	; 0
      fb0:	60 e0       	ldi	r22, 0x00	; 0
