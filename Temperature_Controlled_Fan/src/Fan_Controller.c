@@ -82,9 +82,9 @@ int main(void)
 		else
 		{
 			/* If the temperature is less than 30 C, Turn off the fan
-			 * With DC_MotorState == STOP , It doesn't matter what the speed is
-			 * BUT With DC_MotorState != STOP , Speed MUST be ZERO
-			 */
+			 * With DC_MotorState = STOP , To Stop the Motion of DC-Motor (Fan OFF)
+			 * Speed MUST be ZERO , To Make OCR0 = ZERO --> NO PWM Signal (NO Speed)
+ 			 */
 			DcMotor_Rotate(STOP, 0);
 		}
 	}
