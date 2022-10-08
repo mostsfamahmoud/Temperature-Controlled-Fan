@@ -45,7 +45,7 @@ that:
 | :---                         |     :---:  | 
 | Application Layer (APP)               | Fan_Controller.c       | 
 | Hardware Abstraction Layer (HAL)     | LCD  / LM35_Sensor / DC Motor | 
-| MicroController Abstraction Layer (HAL)     | GPIO / ADC / PWM       | 
+| MicroController Abstraction Layer (MCAL)     | GPIO / ADC / PWM       | 
 
 ## Deployment
 
