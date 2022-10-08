@@ -21,11 +21,11 @@
 
 /*
  * Description:
- *         Function responsible for initialize the ADC driver.
+ *     Function responsible for initialize the ADC driver.
  * Inputs:
- *         Pointer to Constant Struct of type (ADC_ConfigType) to dynamically configure Ref_Volt & Prescaler of ADC
+ *     Pointer to Constant Struct of type (ADC_ConfigType) to dynamically configure Ref_Volt & Prescaler of ADC
  * Return:
- *         None
+ *     None
  */
 void ADC_init(const ADC_ConfigType * Config_Ptr)
 {
