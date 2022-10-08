@@ -27,6 +27,7 @@
 #define MOTOR_IN2_PIN_ID           PIN1_ID
 
 
+/* Enum DcMotor_State to Select type of motion of DC-Motor (CW, A_CW, Stop) */
 typedef enum{
 	STOP,Anti_ClockWise,ClockWise
 }DcMotor_State;
@@ -40,12 +41,7 @@ typedef enum{
 /*
 Description
 	1) The Function responsible for setup the direction for the two motor pins through the GPIO driver.
-
 	2) Stop at the DC-Motor at the beginning through the GPIO driver.
-
-Inputs: None
-
-Return: None
 */
 void DcMotor_Init(void);
 
