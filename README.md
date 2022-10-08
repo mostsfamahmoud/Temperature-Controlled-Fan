@@ -53,8 +53,8 @@ To deploy this project
 
 Install the Following Software:
 
-- [Protues Simulator] (https://ettron.com/proteus-8-14-download-free-with-arduino-libraries-latest-version/).
-- [Eclipse IDE] (https://www.eclipse.org/downloads/packages/)
+- [Protues Simulator](https://ettron.com/proteus-8-14-download-free-with-arduino-libraries-latest-version/).
+- [Eclipse IDE](https://www.eclipse.org/downloads/packages/)
 
 ## 🔗 Personal Links
 
