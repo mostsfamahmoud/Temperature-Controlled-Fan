@@ -46,6 +46,6 @@ void PWM_Timer0_Start(uint8 duty_cycle)
 
 	OCR0  = (duty_cycle/100.0) * 255;      /* Set Compare Value (Duty Cycle here is Percentage) */
 
-	GPIO_setupPinDirection(PORTB_ID, PIN3_ID, PIN_OUTPUT); /* Set PB3/OC0 as Output pin --> pin where the PWM signal is generated from MC. */
+	GPIO_setupPinDirection(OC0_PORT_ID, OC0_PIN_ID, PIN_OUTPUT); /* Set PB3/OC0 as Output pin --> pin where the PWM signal is generated from MC. */
 
 }
