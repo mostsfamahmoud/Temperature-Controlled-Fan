@@ -24,12 +24,7 @@
 /*
 Description
 	1) The Function responsible for setup the direction for the two motor pins through the GPIO driver.
-
 	2) Stop at the DC-Motor at the beginning through the GPIO driver.
-
-Inputs: None
-
-Return: None
 */
 void DcMotor_Init(void)
 {
@@ -89,8 +84,6 @@ void DcMotor_Rotate(DcMotor_State state,uint8 speed)
 	}
 	else
 	{
-		/* Stop the DC-Motor when Speed is out of Range (IN1 = 0, IN2 = 0) */
-		GPIO_writePin(MOTOR_PINS_PORT_ID, MOTOR_IN1_PIN_ID, LOGIC_LOW);
-		GPIO_writePin(MOTOR_PINS_PORT_ID, MOTOR_IN2_PIN_ID, LOGIC_LOW);
+		PWM_Timer0_Start(0);
 	}
 }
